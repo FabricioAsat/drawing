@@ -9,6 +9,8 @@ import { DrawingCanvas } from "./components/DrawingCanvas";
 
 export default function App() {
   const [currentAction, setCurrentAction] = useState(ACTIONS.SELECT);
+  const [canDelete, setCanDelete] = useState(false);
+  const [selectedShape, setSelectedShape] = useState<TSelectedShape>();
 
   //*: Refs
   const stageRef = useRef<StageRef | null>(null);
@@ -18,8 +20,19 @@ export default function App() {
       <Actions
         setCurrentAction={setCurrentAction}
         currentAction={currentAction}
+        canDelete={canDelete}
+        selectedShape={selectedShape}
+        setSelectedShape={setSelectedShape}
       />
-      <DrawingCanvas stageRef={stageRef} />
+
+      <DrawingCanvas
+        stageRef={stageRef}
+        currentAction={currentAction}
+        setCurrentAction={setCurrentAction}
+        setCanDelete={setCanDelete}
+        selectedShape={selectedShape}
+        setSelectedShape={setSelectedShape}
+      />
     </>
   );
 }
