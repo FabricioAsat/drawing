@@ -5,6 +5,8 @@ interface ShapeContextProps {
   addRect: (rect: TRect) => void;
   updateSizeRect: (x: number, y: number, transformerShapeId: string) => void;
   deleteRect: (id: string) => void;
+  getRectById: (id: string) => TRect | undefined;
+  updateRectInfo: (updatedRect: TRect) => void;
 }
 
 const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
@@ -12,7 +14,8 @@ const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
 export function ShapeProvider({ children }: { children: React.ReactNode }) {
   const [rectangles, setRectangles] = useState<Array<TRect>>([]);
 
-  function addRect(rect: TRect) {
+  //*: Rectangles
+  function addRect(rect: TRect): void {
     setRectangles([...rectangles, rect]);
   }
   function updateSizeRect(x: number, y: number, transformerShapeId: string) {
@@ -29,9 +32,25 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
       })
     );
   }
-  function deleteRect(id: string) {
+  function deleteRect(id: string): void {
     setRectangles(rectangles.filter((rectangle) => rectangle.id !== id));
   }
+  function getRectById(id: string): TRect | undefined {
+    return rectangles.find((rectangle) => rectangle.id === id);
+  }
+  function updateRectInfo(updatedRect: TRect): void {
+    console.log(updatedRect);
+    setRectangles((rectangles) =>
+      rectangles.map((rectangle) => {
+        if (rectangle.id === updatedRect.id) {
+          return { ...rectangle, ...updatedRect };
+        }
+        return rectangle;
+      })
+    );
+  }
+
+  //*: Circles
 
   return (
     <shapeContext.Provider
@@ -40,6 +59,8 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
         addRect,
         updateSizeRect,
         deleteRect,
+        getRectById,
+        updateRectInfo,
       }}
     >
       {children}

@@ -126,7 +126,7 @@ export const DrawingCanvas = ({
           />
         ))}
 
-        <Transformer ref={transformerRef} />
+        <Transformer ref={transformerRef} padding={5} />
       </Layer>
     </Stage>
   );

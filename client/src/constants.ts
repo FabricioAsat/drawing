@@ -9,3 +9,7 @@ export const ACTIONS = {
   DRAW: "draw",
   TEXT: "text",
 };
+
+export const TYPESHAPES = {
+  RECTANGLE: "Rect",
+};

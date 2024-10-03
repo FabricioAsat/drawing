@@ -6,6 +6,7 @@ import { Stage as StageRef } from "konva/lib/Stage";
 import { ACTIONS } from "./constants";
 import { Actions } from "./components/Actions";
 import { DrawingCanvas } from "./components/DrawingCanvas";
+import { Settings } from "./components/Settings";
 
 export default function App() {
   const [currentAction, setCurrentAction] = useState(ACTIONS.SELECT);
@@ -24,6 +25,8 @@ export default function App() {
         selectedShape={selectedShape}
         setSelectedShape={setSelectedShape}
       />
+
+      <Settings selectedShape={selectedShape} />
 
       <DrawingCanvas
         stageRef={stageRef}
