@@ -2,7 +2,7 @@ export const ACTIONS = {
   HAND: "hand",
   SELECT: "select",
   RECTANGLE: "rectangle",
-  DIAMOND: "diamond",
+  STAR: "star",
   CICLE: "cicle",
   ARROW: "arrow",
   LINE: "line",
@@ -12,4 +12,5 @@ export const ACTIONS = {
 
 export const TYPESHAPES = {
   RECTANGLE: "Rect",
+  STAR: "Star",
 };

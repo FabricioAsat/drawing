@@ -1,15 +1,14 @@
 import { AiOutlineLine } from "react-icons/ai";
 import { BsCursor } from "react-icons/bs";
-import { IoHandLeftOutline } from "react-icons/io5";
+import { IoHandLeftOutline, IoStarOutline } from "react-icons/io5";
 import {
   LuArrowDownRight,
   LuCircle,
-  LuDiamond,
   LuPenLine,
   LuRectangleHorizontal,
   LuTextCursor,
 } from "react-icons/lu";
-import { ACTIONS } from "../constants";
+import { ACTIONS, TYPESHAPES } from "../constants";
 import { RiDeleteBin2Fill, RiDeleteBin7Fill } from "react-icons/ri";
 import { useShapeContext } from "../context/ShapeContext";
 
@@ -26,7 +25,7 @@ export const Actions = ({
   selectedShape: TSelectedShape | undefined;
   setSelectedShape: (selectedShape: TSelectedShape | undefined) => void;
 }) => {
-  const { deleteRect } = useShapeContext();
+  const { deleteRect, deleteStar } = useShapeContext();
 
   //TODO: Revisar el tema de los cursors.
   function handleAction(newAction: string) {
@@ -34,10 +33,16 @@ export const Actions = ({
   }
 
   function handleDelete() {
-    if (selectedShape) {
-      deleteRect(selectedShape.id);
-      setSelectedShape(undefined);
+    if (!selectedShape) return;
+    switch (selectedShape.type) {
+      case TYPESHAPES.RECTANGLE:
+        deleteRect(selectedShape.id);
+        break;
+      case TYPESHAPES.STAR:
+        deleteStar(selectedShape.id);
+        break;
     }
+    setSelectedShape(undefined);
   }
 
   //TODO: Revisar la clase "left-[calc(50vw-232px)]",
@@ -77,13 +82,13 @@ export const Actions = ({
       </button>
       <button
         onClick={() => {
-          handleAction(ACTIONS.DIAMOND);
+          handleAction(ACTIONS.STAR);
         }}
         className={`px-3 py-2 transition-colors duration-200 rounded-md  ${
-          currentAction === ACTIONS.DIAMOND ? "bg-sky-300" : "hover:bg-sky-200"
+          currentAction === ACTIONS.STAR ? "bg-sky-300" : "hover:bg-sky-200"
         }`}
       >
-        <LuDiamond size={16} color="#212529" />
+        <IoStarOutline size={16} color="#212529" />
       </button>
       <button
         onClick={() => {

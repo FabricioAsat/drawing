@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { Stage as StageRef } from "konva/lib/Stage";
 import { Transformer as TransformerRef } from "konva/lib/shapes/Transformer";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Layer, Rect, Stage, Transformer } from "react-konva";
+import { Layer, Rect, Stage, Star, Transformer } from "react-konva";
 
 import { ACTIONS } from "../constants";
 import { useShapeContext } from "../context/ShapeContext";
@@ -29,7 +29,8 @@ export const DrawingCanvas = ({
   const transformerRef = useRef<TransformerRef | null>(null);
 
   //* Arrays de los componentes que se renderizarán
-  const { rectangles, addRect, updateSizeRect } = useShapeContext();
+  const { rectangles, addRect, updateSizeRect, stars, addStar } =
+    useShapeContext();
 
   //*: Funciones de eventos del stage
   function onPointerUp() {
@@ -59,10 +60,24 @@ export const DrawingCanvas = ({
           height: 5,
           width: 5,
           cornerRadius: 0,
-          strokeColor: "#000",
-          strokeWidth: 1,
+          strokeColor: "#fff",
+          strokeWidth: 3,
+          fillColor: "#262626",
+        });
+        break;
+      case ACTIONS.STAR:
+        addStar({
+          id,
+          x,
+          y,
+          height: 100,
+          width: 100,
+          numPoints: 5,
+          innerRadius: 25,
+          outerRadius: 50,
+          strokeColor: "#262626",
+          strokeWidth: 3,
           fillColor: "#fff0",
-          fillWith: 0,
         });
         break;
     }
@@ -76,6 +91,9 @@ export const DrawingCanvas = ({
     switch (currentAction) {
       case ACTIONS.RECTANGLE:
         updateSizeRect(x, y, transformerShapeId);
+        break;
+      case ACTIONS.STAR:
+        // updateSizeStar(x, y, transformerShapeId); // Testeando como funcionaria de este modo
         break;
     }
   }
@@ -121,6 +139,25 @@ export const DrawingCanvas = ({
             stroke={rectangle.strokeColor}
             strokeWidth={rectangle.strokeWidth}
             fill={rectangle.fillColor}
+            draggable={isDraggable}
+            onClick={showTransformerBox}
+          />
+        ))}
+
+        {stars.map((star: TStar) => (
+          <Star
+            key={star.id}
+            id={star.id}
+            x={star.x}
+            y={star.y}
+            numPoints={star.numPoints}
+            innerRadius={star.innerRadius}
+            outerRadius={star.outerRadius}
+            height={star.width}
+            width={star.width}
+            stroke={star.strokeColor}
+            strokeWidth={star.strokeWidth}
+            fill={star.fillColor}
             draggable={isDraggable}
             onClick={showTransformerBox}
           />

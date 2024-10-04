@@ -8,5 +8,18 @@ type TRect = {
   strokeColor: string;
   strokeWidth: number;
   fillColor: string;
-  fillWith: number;
+};
+
+type TStar = {
+  id: string;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+  numPoints: number;
+  innerRadius: number;
+  outerRadius: number;
+  strokeColor: string;
+  strokeWidth: number;
+  fillColor: string;
 };

@@ -1,45 +1,43 @@
 import { useEffect, useState } from "react";
-import { FaRegSquare, FaSquare } from "react-icons/fa";
-import { TYPESHAPES } from "../constants";
+import { FaSquare } from "react-icons/fa";
 import { useShapeContext } from "../context/ShapeContext";
 import {
+  PiNumberSquareEightFill,
+  PiNumberSquareFiveFill,
+  PiNumberSquareFourFill,
   PiNumberSquareNineFill,
+  PiNumberSquareSevenFill,
   PiNumberSquareSixFill,
   PiNumberSquareThreeFill,
+  PiNumberSquareTwoFill,
 } from "react-icons/pi";
-import { FaRegSquareFull } from "react-icons/fa6";
 import { RxTransparencyGrid } from "react-icons/rx";
 
-export const SRect = ({ selectedShape }: { selectedShape: TSelectedShape }) => {
-  const [currentSetting, setcurrentSetting] = useState<TRect>();
-  const { getRectById, updateRectInfo } = useShapeContext();
+export const SStar = ({ selectedShape }: { selectedShape: TSelectedShape }) => {
+  const [currentSetting, setcurrentSetting] = useState<TStar>();
+  const { getStarById, updateStarInfo } = useShapeContext();
 
   function handleCurrentSetting(attr: string, value: string | number) {
     if (!currentSetting || !selectedShape) return;
-    switch (selectedShape.type) {
-      case TYPESHAPES.RECTANGLE:
-        setcurrentSetting({ ...currentSetting, [attr]: value });
-        break;
+
+    if (attr === "innerRadius" || attr === "outerRadius") {
+      const re = new RegExp("[0-9]{0,3}");
+      if (!re.test(String(value))) return;
+      setcurrentSetting({ ...currentSetting, [attr]: Number(value) });
+      return;
     }
+    setcurrentSetting({ ...currentSetting, [attr]: value });
   }
 
   //*: Effects
   useEffect(() => {
     if (!selectedShape) return;
-    switch (selectedShape.type) {
-      case TYPESHAPES.RECTANGLE:
-        setcurrentSetting(getRectById(selectedShape.id));
-        break;
-    }
+    setcurrentSetting(getStarById(selectedShape.id));
   }, [selectedShape]);
 
   useEffect(() => {
-    if (!currentSetting || !selectedShape) return;
-    switch (selectedShape.type) {
-      case TYPESHAPES.RECTANGLE:
-        updateRectInfo(currentSetting);
-        break;
-    }
+    if (!currentSetting) return;
+    updateStarInfo(currentSetting);
   }, [currentSetting]);
 
   return (
@@ -202,35 +200,88 @@ export const SRect = ({ selectedShape }: { selectedShape: TSelectedShape }) => {
         </div>
       </aside>
 
-      <aside className="flex flex-col items-start">
-        <p className="text-xs italic font-bold">Bordes</p>
+      <aside className="flex flex-col items-start justify-center gap-x-5">
+        <p className="text-xs italic font-bold">Numero de puntos</p>
         <div className="flex items-center my-px gap-x-2">
           <button
-            onClick={() => handleCurrentSetting("cornerRadius", 0)}
-            className={`p-px border hover:border-neutral-300 ${
-              currentSetting?.cornerRadius === 0
+            onClick={() => handleCurrentSetting("numPoints", 2)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 2
                 ? "border-neutral-800"
                 : "border-transparent"
             }`}
           >
-            <FaRegSquareFull size={17} color="#262626" />
+            <PiNumberSquareTwoFill size={20} color="#262626" />
           </button>
           <button
-            onClick={() =>
-              handleCurrentSetting(
-                "cornerRadius",
-                (currentSetting?.width || 0) < (currentSetting?.height || 0)
-                  ? (currentSetting?.width || 0) * 0.2
-                  : (currentSetting?.height || 0) * 0.2
-              )
-            }
+            onClick={() => handleCurrentSetting("numPoints", 3)}
             className={`p-px border rounded-md hover:border-neutral-300 ${
-              currentSetting?.cornerRadius || 0 > 0
+              currentSetting?.numPoints === 3
                 ? "border-neutral-800"
                 : "border-transparent"
             }`}
           >
-            <FaRegSquare size={20} color="#262626" />
+            <PiNumberSquareThreeFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 4)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 4
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareFourFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 5)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 5
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareFiveFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 6)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 6
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareSixFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 7)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 7
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareSevenFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 8)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 8
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareEightFill size={20} color="#262626" />
+          </button>
+          <button
+            onClick={() => handleCurrentSetting("numPoints", 9)}
+            className={`p-px border rounded-md hover:border-neutral-300 ${
+              currentSetting?.numPoints === 9
+                ? "border-neutral-800"
+                : "border-transparent"
+            }`}
+          >
+            <PiNumberSquareNineFill size={20} color="#262626" />
           </button>
         </div>
       </aside>

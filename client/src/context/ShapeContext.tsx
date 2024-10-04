@@ -7,12 +7,20 @@ interface ShapeContextProps {
   deleteRect: (id: string) => void;
   getRectById: (id: string) => TRect | undefined;
   updateRectInfo: (updatedRect: TRect) => void;
+
+  stars: TStar[];
+  addStar: (star: TStar) => void;
+  updateSizeStar: (x: number, y: number, transformerShapeId: string) => void;
+  deleteStar: (id: string) => void;
+  getStarById: (id: string) => TStar | undefined;
+  updateStarInfo: (updatedRect: TStar) => void;
 }
 
 const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
 
 export function ShapeProvider({ children }: { children: React.ReactNode }) {
   const [rectangles, setRectangles] = useState<Array<TRect>>([]);
+  const [stars, setStars] = useState<Array<TStar>>([]);
 
   //*: Rectangles
   function addRect(rect: TRect): void {
@@ -39,7 +47,6 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     return rectangles.find((rectangle) => rectangle.id === id);
   }
   function updateRectInfo(updatedRect: TRect): void {
-    console.log(updatedRect);
     setRectangles((rectangles) =>
       rectangles.map((rectangle) => {
         if (rectangle.id === updatedRect.id) {
@@ -50,7 +57,40 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  //*: Circles
+  //*: Diamonds
+  function addStar(star: TStar): void {
+    setStars([...stars, star]);
+  }
+  function updateSizeStar(x: number, y: number, transformerShapeId: string) {
+    setStars((stars) =>
+      stars.map((star) => {
+        if (star.id === transformerShapeId) {
+          return {
+            ...star,
+            width: x - star.x,
+            height: y - star.y,
+          };
+        }
+        return star;
+      })
+    );
+  }
+  function deleteStar(id: string): void {
+    setStars(stars.filter((star) => star.id !== id));
+  }
+  function getStarById(id: string): TStar | undefined {
+    return stars.find((star) => star.id === id);
+  }
+  function updateStarInfo(updatedRect: TStar): void {
+    setStars((stars) =>
+      stars.map((star) => {
+        if (star.id === updatedRect.id) {
+          return { ...star, ...updatedRect };
+        }
+        return star;
+      })
+    );
+  }
 
   return (
     <shapeContext.Provider
@@ -61,6 +101,13 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
         deleteRect,
         getRectById,
         updateRectInfo,
+
+        stars,
+        addStar,
+        updateSizeStar,
+        deleteStar,
+        getStarById,
+        updateStarInfo,
       }}
     >
       {children}
