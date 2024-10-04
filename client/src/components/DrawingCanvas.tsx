@@ -60,9 +60,9 @@ export const DrawingCanvas = ({
           height: 5,
           width: 5,
           cornerRadius: 0,
-          strokeColor: "#fff",
+          strokeColor: "#262626",
           strokeWidth: 3,
-          fillColor: "#262626",
+          fillColor: "#0000",
         });
         break;
       case ACTIONS.STAR:
