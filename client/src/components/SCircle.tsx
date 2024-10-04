@@ -1,32 +1,34 @@
 import { useEffect, useState } from "react";
-import { FaRegSquare, FaSquare } from "react-icons/fa";
+import { FaSquare } from "react-icons/fa";
 import { useShapeContext } from "../context/ShapeContext";
 import {
   PiNumberSquareNineFill,
   PiNumberSquareSixFill,
   PiNumberSquareThreeFill,
 } from "react-icons/pi";
-import { FaRegSquareFull } from "react-icons/fa6";
 import { RxTransparencyGrid } from "react-icons/rx";
 
-export const SRect = ({ selectedShape }: { selectedShape: TSelectedShape }) => {
-  const [currentSetting, setcurrentSetting] = useState<TRect>();
-  const { getRectById, updateRectInfo } = useShapeContext();
+export const SCircle = ({
+  selectedShape,
+}: {
+  selectedShape: TSelectedShape;
+}) => {
+  const [currentSetting, setcurrentSetting] = useState<TCircle>();
+  const { getCircleById, updateCircleInfo } = useShapeContext();
 
   function handleCurrentSetting(attr: string, value: string | number) {
     if (!currentSetting || !selectedShape) return;
     setcurrentSetting({ ...currentSetting, [attr]: value });
   }
-
   //*: Effects
   useEffect(() => {
     if (!selectedShape) return;
-    setcurrentSetting(getRectById(selectedShape.id));
+    setcurrentSetting(getCircleById(selectedShape.id));
   }, [selectedShape]);
 
   useEffect(() => {
     if (!currentSetting || !selectedShape) return;
-    updateRectInfo(currentSetting);
+    updateCircleInfo(currentSetting);
   }, [currentSetting]);
 
   return (
@@ -185,39 +187,6 @@ export const SRect = ({ selectedShape }: { selectedShape: TSelectedShape }) => {
             }`}
           >
             <PiNumberSquareNineFill size={20} color="#262626" />
-          </button>
-        </div>
-      </aside>
-
-      <aside className="flex flex-col items-start">
-        <p className="text-xs italic font-bold">Bordes</p>
-        <div className="flex items-center my-px gap-x-2">
-          <button
-            onClick={() => handleCurrentSetting("cornerRadius", 0)}
-            className={`p-px border hover:border-neutral-300 ${
-              currentSetting?.cornerRadius === 0
-                ? "border-neutral-800"
-                : "border-transparent"
-            }`}
-          >
-            <FaRegSquareFull size={17} color="#262626" />
-          </button>
-          <button
-            onClick={() =>
-              handleCurrentSetting(
-                "cornerRadius",
-                (currentSetting?.width || 0) < (currentSetting?.height || 0)
-                  ? (currentSetting?.width || 0) * 0.2
-                  : (currentSetting?.height || 0) * 0.2
-              )
-            }
-            className={`p-px border rounded-md hover:border-neutral-300 ${
-              currentSetting?.cornerRadius || 0 > 0
-                ? "border-neutral-800"
-                : "border-transparent"
-            }`}
-          >
-            <FaRegSquare size={20} color="#262626" />
           </button>
         </div>
       </aside>

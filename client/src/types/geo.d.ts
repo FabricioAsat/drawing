@@ -23,3 +23,15 @@ type TStar = {
   strokeWidth: number;
   fillColor: string;
 };
+
+type TCircle = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  radius: number;
+  strokeColor: string;
+  strokeWidth: number;
+  fillColor: string;
+};

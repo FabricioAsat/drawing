@@ -25,7 +25,7 @@ export const Actions = ({
   selectedShape: TSelectedShape | undefined;
   setSelectedShape: (selectedShape: TSelectedShape | undefined) => void;
 }) => {
-  const { deleteRect, deleteStar } = useShapeContext();
+  const { deleteRect, deleteStar, deleteCircle } = useShapeContext();
 
   //TODO: Revisar el tema de los cursors.
   function handleAction(newAction: string) {
@@ -40,6 +40,9 @@ export const Actions = ({
         break;
       case TYPESHAPES.STAR:
         deleteStar(selectedShape.id);
+        break;
+      case TYPESHAPES.CIRCLE:
+        deleteCircle(selectedShape.id);
         break;
     }
     setSelectedShape(undefined);

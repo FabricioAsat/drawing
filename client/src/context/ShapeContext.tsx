@@ -10,10 +10,16 @@ interface ShapeContextProps {
 
   stars: TStar[];
   addStar: (star: TStar) => void;
-  updateSizeStar: (x: number, y: number, transformerShapeId: string) => void;
   deleteStar: (id: string) => void;
   getStarById: (id: string) => TStar | undefined;
   updateStarInfo: (updatedRect: TStar) => void;
+
+  circles: TCircle[];
+  addCircle: (circle: TCircle) => void;
+  updateSizeCircle: (x: number, y: number, transformerShapeId: string) => void;
+  deleteCircle: (id: string) => void;
+  getCircleById: (id: string) => TCircle | undefined;
+  updateCircleInfo: (updatedCircle: TCircle) => void;
 }
 
 const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
@@ -21,6 +27,7 @@ const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
 export function ShapeProvider({ children }: { children: React.ReactNode }) {
   const [rectangles, setRectangles] = useState<Array<TRect>>([]);
   const [stars, setStars] = useState<Array<TStar>>([]);
+  const [circles, setCircles] = useState<Array<TCircle>>([]);
 
   //*: Rectangles
   function addRect(rect: TRect): void {
@@ -57,23 +64,9 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  //*: Diamonds
+  //*: Stars
   function addStar(star: TStar): void {
     setStars([...stars, star]);
-  }
-  function updateSizeStar(x: number, y: number, transformerShapeId: string) {
-    setStars((stars) =>
-      stars.map((star) => {
-        if (star.id === transformerShapeId) {
-          return {
-            ...star,
-            width: x - star.x,
-            height: y - star.y,
-          };
-        }
-        return star;
-      })
-    );
   }
   function deleteStar(id: string): void {
     setStars(stars.filter((star) => star.id !== id));
@@ -92,6 +85,43 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
+  //*: Circles
+  function addCircle(circle: TCircle): void {
+    setCircles([...circles, circle]);
+  }
+  function updateSizeCircle(x: number, y: number, transformerShapeId: string) {
+    setCircles((circles) =>
+      circles.map((circle) => {
+        if (circle.id === transformerShapeId) {
+          console.log(circle.width);
+          return {
+            ...circle,
+            radius: Math.abs(circle.width / 2),
+            width: x - circle.x,
+            height: y - circle.y,
+          };
+        }
+        return circle;
+      })
+    );
+  }
+  function deleteCircle(id: string): void {
+    setCircles(circles.filter((circle) => circle.id !== id));
+  }
+  function getCircleById(id: string): TCircle | undefined {
+    return circles.find((circle) => circle.id === id);
+  }
+  function updateCircleInfo(updatedCircle: TCircle): void {
+    setCircles((circles) =>
+      circles.map((circle) => {
+        if (circle.id === updatedCircle.id) {
+          return { ...circle, ...updatedCircle };
+        }
+        return circle;
+      })
+    );
+  }
+
   return (
     <shapeContext.Provider
       value={{
@@ -104,10 +134,16 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
 
         stars,
         addStar,
-        updateSizeStar,
         deleteStar,
         getStarById,
         updateStarInfo,
+
+        circles,
+        addCircle,
+        updateSizeCircle,
+        deleteCircle,
+        getCircleById,
+        updateCircleInfo,
       }}
     >
       {children}

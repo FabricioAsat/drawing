@@ -2,7 +2,7 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { Stage as StageRef } from "konva/lib/Stage";
 import { Transformer as TransformerRef } from "konva/lib/shapes/Transformer";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Layer, Rect, Stage, Star, Transformer } from "react-konva";
+import { Circle, Layer, Rect, Stage, Star, Transformer } from "react-konva";
 
 import { ACTIONS } from "../constants";
 import { useShapeContext } from "../context/ShapeContext";
@@ -29,8 +29,16 @@ export const DrawingCanvas = ({
   const transformerRef = useRef<TransformerRef | null>(null);
 
   //* Arrays de los componentes que se renderizarán
-  const { rectangles, addRect, updateSizeRect, stars, addStar } =
-    useShapeContext();
+  const {
+    rectangles,
+    addRect,
+    updateSizeRect,
+    stars,
+    addStar,
+    circles,
+    addCircle,
+    updateSizeCircle,
+  } = useShapeContext();
 
   //*: Funciones de eventos del stage
   function onPointerUp() {
@@ -80,6 +88,20 @@ export const DrawingCanvas = ({
           fillColor: "#fff0",
         });
         break;
+
+      case ACTIONS.CICLE:
+        addCircle({
+          id,
+          x,
+          y,
+          width: 10,
+          height: 10,
+          radius: 5,
+          strokeColor: "#262626",
+          strokeWidth: 3,
+          fillColor: "#fff0",
+        });
+        break;
     }
   }
   function onPointerMove() {
@@ -92,8 +114,10 @@ export const DrawingCanvas = ({
       case ACTIONS.RECTANGLE:
         updateSizeRect(x, y, transformerShapeId);
         break;
-      case ACTIONS.STAR:
-        // updateSizeStar(x, y, transformerShapeId); // Testeando como funcionaria de este modo
+      case ACTIONS.STAR: // Se deforma la estrella, asique lo saqué
+        break;
+      case ACTIONS.CICLE:
+        updateSizeCircle(x, y, transformerShapeId);
         break;
     }
   }
@@ -158,6 +182,23 @@ export const DrawingCanvas = ({
             stroke={star.strokeColor}
             strokeWidth={star.strokeWidth}
             fill={star.fillColor}
+            draggable={isDraggable}
+            onClick={showTransformerBox}
+          />
+        ))}
+
+        {circles.map((circle: TCircle) => (
+          <Circle
+            key={circle.id}
+            id={circle.id}
+            x={circle.x}
+            width={circle.width}
+            height={circle.width}
+            y={circle.y}
+            radius={Math.abs(circle.radius)}
+            stroke={circle.strokeColor}
+            strokeWidth={circle.strokeWidth}
+            fill={circle.fillColor}
             draggable={isDraggable}
             onClick={showTransformerBox}
           />

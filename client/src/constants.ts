@@ -13,4 +13,5 @@ export const ACTIONS = {
 export const TYPESHAPES = {
   RECTANGLE: "Rect",
   STAR: "Star",
+  CIRCLE: "Circle",
 };
