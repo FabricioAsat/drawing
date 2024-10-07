@@ -13,6 +13,14 @@ export default function App() {
   const [canDelete, setCanDelete] = useState(false);
   const [selectedShape, setSelectedShape] = useState<TSelectedShape>();
 
+  //*: Special states
+  const [initialDrawProps, setInitialDrawProps] = useState({
+    strokeWidth: 3,
+    strokeColor: "#262626",
+  });
+
+  console.log(initialDrawProps);
+
   //*: Refs
   const stageRef = useRef<StageRef | null>(null);
 
@@ -26,7 +34,12 @@ export default function App() {
         setSelectedShape={setSelectedShape}
       />
 
-      <Settings selectedShape={selectedShape} />
+      <Settings
+        selectedShape={selectedShape}
+        currentAction={currentAction}
+        setInitialDrawProps={setInitialDrawProps}
+        initialDrawProps={initialDrawProps}
+      />
 
       <DrawingCanvas
         stageRef={stageRef}
@@ -35,6 +48,7 @@ export default function App() {
         setCanDelete={setCanDelete}
         selectedShape={selectedShape}
         setSelectedShape={setSelectedShape}
+        initialDrawProps={initialDrawProps}
       />
     </>
   );

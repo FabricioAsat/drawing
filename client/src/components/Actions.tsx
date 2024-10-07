@@ -6,7 +6,6 @@ import {
   LuCircle,
   LuPenLine,
   LuRectangleHorizontal,
-  LuTextCursor,
 } from "react-icons/lu";
 import { ACTIONS, TYPESHAPES } from "../constants";
 import { RiDeleteBin2Fill, RiDeleteBin7Fill } from "react-icons/ri";
@@ -25,8 +24,14 @@ export const Actions = ({
   selectedShape: TSelectedShape | undefined;
   setSelectedShape: (selectedShape: TSelectedShape | undefined) => void;
 }) => {
-  const { deleteRect, deleteStar, deleteCircle, deleteLine, deleteArrow } =
-    useShapeContext();
+  const {
+    deleteRect,
+    deleteStar,
+    deleteCircle,
+    deleteLine,
+    deleteArrow,
+    deletePen,
+  } = useShapeContext();
 
   //TODO: Revisar el tema de los cursors.
   function handleAction(newAction: string) {
@@ -51,13 +56,16 @@ export const Actions = ({
       case TYPESHAPES.ARROW:
         deleteArrow(selectedShape.id);
         break;
+      case TYPESHAPES.DRAW:
+        deletePen(selectedShape.id);
+        break;
     }
     setSelectedShape(undefined);
   }
 
   //TODO: Revisar la clase "left-[calc(50vw-232px)]",
   return (
-    <div className="absolute z-50 flex top-5 left-[calc(50vw-232px)] gap-x-2 px-5 py-2 rounded-lg shadow-md shadow-black/25 bg-white">
+    <div className="absolute z-50 flex top-5 left-[calc(50vw-237px)] gap-x-2 px-5 py-2 rounded-lg shadow-md shadow-black/25 bg-white">
       <button
         onClick={() => {
           handleAction(ACTIONS.HAND);
@@ -139,16 +147,6 @@ export const Actions = ({
         }`}
       >
         <LuPenLine size={16} color="#212529" />
-      </button>
-      <button
-        onClick={() => {
-          handleAction(ACTIONS.TEXT);
-        }}
-        className={`px-3 py-2 transition-colors duration-200 rounded-md  ${
-          currentAction === ACTIONS.TEXT ? "bg-sky-300" : "hover:bg-sky-200"
-        }`}
-      >
-        <LuTextCursor size={16} color="#212529" />
       </button>
 
       <hr className="w-0.5 h-8 border-l-2 border-neutral-200" />

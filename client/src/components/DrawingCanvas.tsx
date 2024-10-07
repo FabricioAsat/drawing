@@ -23,6 +23,7 @@ export const DrawingCanvas = ({
   setCanDelete,
   selectedShape,
   setSelectedShape,
+  initialDrawProps,
 }: {
   currentAction: string;
   stageRef: RefObject<StageRef>;
@@ -30,6 +31,7 @@ export const DrawingCanvas = ({
   setCanDelete: (canDelete: boolean) => void;
   selectedShape: TSelectedShape | undefined;
   setSelectedShape: (selectedShape: TSelectedShape | undefined) => void;
+  initialDrawProps: TInitialDrawProps;
 }) => {
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [isDraggable, setIsDraggable] = useState<boolean>(false);
@@ -53,13 +55,18 @@ export const DrawingCanvas = ({
     arrows,
     addArrow,
     updateSizeArrow,
+    pens,
+    addPen,
+    updateSizePen,
   } = useShapeContext();
 
   //*: Funciones de eventos del stage
   function onPointerUp() {
     setIsDrawing(false);
-    setCurrentAction(ACTIONS.SELECT);
+    if (currentAction === ACTIONS.DRAW || currentAction === ACTIONS.HAND)
+      return;
 
+    setCurrentAction(ACTIONS.SELECT);
     if (currentAction === ACTIONS.SELECT) {
       setSelectedShape(undefined);
       transformerRef.current?.nodes([]);
@@ -138,6 +145,14 @@ export const DrawingCanvas = ({
           strokeWidth: 3,
         });
         break;
+      case ACTIONS.DRAW:
+        addPen({
+          id,
+          points: [x, y],
+          strokeColor: initialDrawProps.strokeColor,
+          strokeWidth: initialDrawProps.strokeWidth,
+        });
+        break;
     }
   }
   function onPointerMove() {
@@ -161,6 +176,9 @@ export const DrawingCanvas = ({
       case ACTIONS.ARROW:
         updateSizeArrow(x, y, transformerShapeId);
         break;
+      case ACTIONS.DRAW:
+        updateSizePen(x, y, transformerShapeId);
+        break;
     }
   }
   // --------------------------------
@@ -168,13 +186,18 @@ export const DrawingCanvas = ({
   function showTransformerBox(e: KonvaEventObject<MouseEvent>) {
     if (currentAction !== ACTIONS.SELECT || !transformerRef.current) return;
     const target = e.currentTarget;
-    setSelectedShape({ id: target.attrs.id, type: target.className });
+    setSelectedShape({
+      id: target.attrs.id,
+      type: target.attrs.type || target.className,
+    });
     transformerRef.current.nodes([target]);
   }
 
   //*: Effects
   useEffect(() => {
-    setIsDraggable(currentAction === ACTIONS.SELECT);
+    setIsDraggable(
+      currentAction === ACTIONS.HAND || currentAction === ACTIONS.SELECT
+    );
   }, [currentAction]);
   useEffect(() => {
     setCanDelete(!!selectedShape);
@@ -197,6 +220,7 @@ export const DrawingCanvas = ({
           <Rect
             key={rectangle.id}
             id={rectangle.id}
+            type="Rect"
             x={rectangle.x}
             y={rectangle.y}
             height={rectangle.height}
@@ -214,6 +238,7 @@ export const DrawingCanvas = ({
           <Star
             key={star.id}
             id={star.id}
+            type="Star"
             x={star.x}
             y={star.y}
             numPoints={star.numPoints}
@@ -232,8 +257,9 @@ export const DrawingCanvas = ({
         {circles.map((circle: TCircle) => (
           <Circle
             key={circle.id}
-            id={circle.id}
             x={circle.x}
+            type="Circle"
+            id={circle.id}
             width={circle.width}
             height={circle.width}
             y={circle.y}
@@ -250,6 +276,7 @@ export const DrawingCanvas = ({
           <Line
             key={line.id}
             id={line.id}
+            type="Line"
             points={[line.x, line.y, line.x2, line.y2]}
             stroke={line.strokeColor}
             strokeWidth={line.strokeWidth}
@@ -262,9 +289,25 @@ export const DrawingCanvas = ({
           <Arrow
             key={arrow.id}
             id={arrow.id}
+            type="Arrow"
             points={[arrow.x, arrow.y, arrow.x2, arrow.y2]}
             stroke={arrow.strokeColor}
             strokeWidth={arrow.strokeWidth}
+            draggable={isDraggable}
+            onClick={showTransformerBox}
+          />
+        ))}
+
+        {pens.map((pen: TPen) => (
+          <Line
+            type="Draw"
+            key={pen.id}
+            id={pen.id}
+            lineCap="round"
+            lineJoin="round"
+            points={pen.points}
+            stroke={pen.strokeColor}
+            strokeWidth={pen.strokeWidth}
             draggable={isDraggable}
             onClick={showTransformerBox}
           />

@@ -55,3 +55,10 @@ type TArrow = {
   strokeColor: string;
   strokeWidth: number;
 };
+
+type TPen = {
+  id: string;
+  points: number[];
+  strokeColor: string;
+  strokeWidth: number;
+};

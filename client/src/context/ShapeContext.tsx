@@ -34,6 +34,13 @@ interface ShapeContextProps {
   deleteArrow: (id: string) => void;
   getArrowById: (id: string) => TArrow | undefined;
   updateArrowInfo: (updatedArrow: TArrow) => void;
+
+  pens: TPen[];
+  addPen: (pen: TPen) => void;
+  updateSizePen: (x: number, y: number, transformerShapeId: string) => void;
+  deletePen: (id: string) => void;
+  getPenById: (id: string) => TPen | undefined;
+  updatePenInfo: (updatedPen: TPen) => void;
 }
 
 const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
@@ -44,6 +51,7 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
   const [circles, setCircles] = useState<Array<TCircle>>([]);
   const [lines, setLines] = useState<Array<TLine>>([]);
   const [arrows, setArrows] = useState<Array<TArrow>>([]);
+  const [pens, setPens] = useState<Array<TPen>>([]);
 
   //*: Rectangles
   function addRect(rect: TRect): void {
@@ -208,6 +216,40 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
+  //*: Pen
+  function addPen(pen: TPen): void {
+    setPens([...pens, pen]);
+  }
+  function updateSizePen(x: number, y: number, transformerShapeId: string) {
+    setPens((pens) =>
+      pens.map((pen) => {
+        if (pen.id === transformerShapeId) {
+          return {
+            ...pen,
+            points: [...pen.points, x, y],
+          };
+        }
+        return pen;
+      })
+    );
+  }
+  function deletePen(id: string): void {
+    setPens(pens.filter((pen) => pen.id !== id));
+  }
+  function getPenById(id: string): TPen | undefined {
+    return pens.find((pen) => pen.id === id);
+  }
+  function updatePenInfo(updatedPen: TPen): void {
+    setPens((pens) =>
+      pens.map((pen) => {
+        if (pen.id === updatedPen.id) {
+          return { ...pen, ...updatedPen };
+        }
+        return pen;
+      })
+    );
+  }
+
   return (
     <shapeContext.Provider
       value={{
@@ -244,6 +286,13 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
         deleteArrow,
         getArrowById,
         updateArrowInfo,
+
+        pens,
+        addPen,
+        updateSizePen,
+        deletePen,
+        getPenById,
+        updatePenInfo,
       }}
     >
       {children}

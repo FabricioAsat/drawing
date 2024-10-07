@@ -7,7 +7,6 @@ export const ACTIONS = {
   ARROW: "arrow",
   LINE: "line",
   DRAW: "draw",
-  TEXT: "text",
 };
 
 export const TYPESHAPES = {
@@ -16,4 +15,5 @@ export const TYPESHAPES = {
   CIRCLE: "Circle",
   ARROW: "Arrow",
   LINE: "Line",
+  DRAW: "Draw",
 };
