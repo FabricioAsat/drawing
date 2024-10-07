@@ -14,4 +14,6 @@ export const TYPESHAPES = {
   RECTANGLE: "Rect",
   STAR: "Star",
   CIRCLE: "Circle",
+  ARROW: "Arrow",
+  LINE: "Line",
 };

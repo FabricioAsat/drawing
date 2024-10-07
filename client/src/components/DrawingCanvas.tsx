@@ -2,7 +2,16 @@ import { RefObject, useEffect, useRef, useState } from "react";
 import { Stage as StageRef } from "konva/lib/Stage";
 import { Transformer as TransformerRef } from "konva/lib/shapes/Transformer";
 import { KonvaEventObject } from "konva/lib/Node";
-import { Circle, Layer, Rect, Stage, Star, Transformer } from "react-konva";
+import {
+  Arrow,
+  Circle,
+  Layer,
+  Line,
+  Rect,
+  Stage,
+  Star,
+  Transformer,
+} from "react-konva";
 
 import { ACTIONS } from "../constants";
 import { useShapeContext } from "../context/ShapeContext";
@@ -38,6 +47,12 @@ export const DrawingCanvas = ({
     circles,
     addCircle,
     updateSizeCircle,
+    lines,
+    addLine,
+    updateSizeLine,
+    arrows,
+    addArrow,
+    updateSizeArrow,
   } = useShapeContext();
 
   //*: Funciones de eventos del stage
@@ -88,7 +103,6 @@ export const DrawingCanvas = ({
           fillColor: "#fff0",
         });
         break;
-
       case ACTIONS.CICLE:
         addCircle({
           id,
@@ -100,6 +114,28 @@ export const DrawingCanvas = ({
           strokeColor: "#262626",
           strokeWidth: 3,
           fillColor: "#fff0",
+        });
+        break;
+      case ACTIONS.LINE:
+        addLine({
+          id,
+          x,
+          y,
+          x2: x,
+          y2: y,
+          strokeColor: "#262626",
+          strokeWidth: 3,
+        });
+        break;
+      case ACTIONS.ARROW:
+        addArrow({
+          id,
+          x,
+          y,
+          x2: x,
+          y2: y,
+          strokeColor: "#262626",
+          strokeWidth: 3,
         });
         break;
     }
@@ -118,6 +154,12 @@ export const DrawingCanvas = ({
         break;
       case ACTIONS.CICLE:
         updateSizeCircle(x, y, transformerShapeId);
+        break;
+      case ACTIONS.LINE:
+        updateSizeLine(x, y, transformerShapeId);
+        break;
+      case ACTIONS.ARROW:
+        updateSizeArrow(x, y, transformerShapeId);
         break;
     }
   }
@@ -199,6 +241,30 @@ export const DrawingCanvas = ({
             stroke={circle.strokeColor}
             strokeWidth={circle.strokeWidth}
             fill={circle.fillColor}
+            draggable={isDraggable}
+            onClick={showTransformerBox}
+          />
+        ))}
+
+        {lines.map((line: TLine) => (
+          <Line
+            key={line.id}
+            id={line.id}
+            points={[line.x, line.y, line.x2, line.y2]}
+            stroke={line.strokeColor}
+            strokeWidth={line.strokeWidth}
+            draggable={isDraggable}
+            onClick={showTransformerBox}
+          />
+        ))}
+
+        {arrows.map((arrow: TArrow) => (
+          <Arrow
+            key={arrow.id}
+            id={arrow.id}
+            points={[arrow.x, arrow.y, arrow.x2, arrow.y2]}
+            stroke={arrow.strokeColor}
+            strokeWidth={arrow.strokeWidth}
             draggable={isDraggable}
             onClick={showTransformerBox}
           />

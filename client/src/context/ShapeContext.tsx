@@ -20,6 +20,20 @@ interface ShapeContextProps {
   deleteCircle: (id: string) => void;
   getCircleById: (id: string) => TCircle | undefined;
   updateCircleInfo: (updatedCircle: TCircle) => void;
+
+  lines: TLine[];
+  addLine: (line: TLine) => void;
+  updateSizeLine: (x: number, y: number, transformerShapeId: string) => void;
+  deleteLine: (id: string) => void;
+  getLineById: (id: string) => TLine | undefined;
+  updateLineInfo: (updatedLine: TLine) => void;
+
+  arrows: TArrow[];
+  addArrow: (arrow: TArrow) => void;
+  updateSizeArrow: (x: number, y: number, transformerShapeId: string) => void;
+  deleteArrow: (id: string) => void;
+  getArrowById: (id: string) => TArrow | undefined;
+  updateArrowInfo: (updatedArrow: TArrow) => void;
 }
 
 const shapeContext = createContext<ShapeContextProps | undefined>(undefined);
@@ -28,6 +42,8 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
   const [rectangles, setRectangles] = useState<Array<TRect>>([]);
   const [stars, setStars] = useState<Array<TStar>>([]);
   const [circles, setCircles] = useState<Array<TCircle>>([]);
+  const [lines, setLines] = useState<Array<TLine>>([]);
+  const [arrows, setArrows] = useState<Array<TArrow>>([]);
 
   //*: Rectangles
   function addRect(rect: TRect): void {
@@ -122,6 +138,76 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
+  //*: Lines
+  function addLine(line: TLine): void {
+    setLines([...lines, line]);
+  }
+  function updateSizeLine(x: number, y: number, transformerShapeId: string) {
+    setLines((lines) =>
+      lines.map((line) => {
+        if (line.id === transformerShapeId) {
+          return {
+            ...line,
+            x2: x,
+            y2: y,
+          };
+        }
+        return line;
+      })
+    );
+  }
+  function deleteLine(id: string): void {
+    setLines(lines.filter((line) => line.id !== id));
+  }
+  function getLineById(id: string): TLine | undefined {
+    return lines.find((line) => line.id === id);
+  }
+  function updateLineInfo(updatedLine: TLine): void {
+    setLines((lines) =>
+      lines.map((line) => {
+        if (line.id === updatedLine.id) {
+          return { ...line, ...updatedLine };
+        }
+        return line;
+      })
+    );
+  }
+
+  //*: Arrows
+  function addArrow(arrow: TArrow): void {
+    setArrows([...arrows, arrow]);
+  }
+  function updateSizeArrow(x: number, y: number, transformerShapeId: string) {
+    setArrows((arrows) =>
+      arrows.map((arrow) => {
+        if (arrow.id === transformerShapeId) {
+          return {
+            ...arrow,
+            x2: x,
+            y2: y,
+          };
+        }
+        return arrow;
+      })
+    );
+  }
+  function deleteArrow(id: string): void {
+    setArrows(arrows.filter((arrow) => arrow.id !== id));
+  }
+  function getArrowById(id: string): TArrow | undefined {
+    return arrows.find((arrow) => arrow.id === id);
+  }
+  function updateArrowInfo(updatedArrow: TArrow): void {
+    setArrows((arrows) =>
+      arrows.map((arrow) => {
+        if (arrow.id === updatedArrow.id) {
+          return { ...arrow, ...updatedArrow };
+        }
+        return arrow;
+      })
+    );
+  }
+
   return (
     <shapeContext.Provider
       value={{
@@ -144,6 +230,20 @@ export function ShapeProvider({ children }: { children: React.ReactNode }) {
         deleteCircle,
         getCircleById,
         updateCircleInfo,
+
+        lines,
+        addLine,
+        updateSizeLine,
+        deleteLine,
+        getLineById,
+        updateLineInfo,
+
+        arrows,
+        addArrow,
+        updateSizeArrow,
+        deleteArrow,
+        getArrowById,
+        updateArrowInfo,
       }}
     >
       {children}

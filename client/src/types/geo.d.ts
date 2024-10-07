@@ -35,3 +35,23 @@ type TCircle = {
   strokeWidth: number;
   fillColor: string;
 };
+
+type TLine = {
+  id: string;
+  x: number;
+  y: number;
+  x2: number;
+  y2: number;
+  strokeColor: string;
+  strokeWidth: number;
+};
+
+type TArrow = {
+  id: string;
+  x: number;
+  y: number;
+  x2: number;
+  y2: number;
+  strokeColor: string;
+  strokeWidth: number;
+};
